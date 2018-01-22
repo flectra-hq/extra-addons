@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<flectra>
+    <data noupdate="1">
+        <record id="analytic.analytic_internal" model="account.analytic.account">
+            <field name="name">Research &amp; Development</field>
+            <field name="partner_id" ref="base.res_partner_address_2"/>
+            <field name="type">contract</field>
+            <field name="invoice_on_timesheets">True</field>
+            <field name="hours_qtt_est">1200</field>
+            <field name="fix_price_invoices">True</field>
+            <field name="to_invoice" ref="hr_timesheet_invoice.timesheet_invoice_factor1"/>
+            <field name="pricelist_id" ref="product.list0"/>
+            <field name="amount_max">100000</field>
+        </record>
+
+        <record id="sale.sale_order_4" model="sale.order">
+            <field name="analytic_account_id" ref="analytic.analytic_internal"/>
+        </record>
+        
+        <record id="hr_timesheet.working_hours_maintenance" model="account.analytic.line">
+            <field name="account_id" ref="analytic.analytic_internal"/>
+            <field name="to_invoice" ref="hr_timesheet_invoice.timesheet_invoice_factor1"/>
+            <field name="unit_amount">100</field>
+        </record>
+
+        <record id="analytic.analytic_our_super_product" model="account.analytic.account">
+            <field name="name">Design</field>
+            <field name="partner_id" ref="base.res_partner_address_18"/>
+            <field name="type">contract</field>
+            <field name="invoice_on_timesheets">True</field>
+            <field name="hours_qtt_est">500</field>
+            <field name="fix_price_invoices">True</field>
+            <field name="pricelist_id" ref="product.list0"/>
+            <field name="amount_max">50000</field>
+            <field name="to_invoice" ref="hr_timesheet_invoice.timesheet_invoice_factor1"/>
+        </record>
+        
+        <record id="sale.sale_order_6" model="sale.order">
+            <field name="partner_id" ref="base.res_partner_address_1"/>
+        </record>
+
+        <record id="analytic.analytic_our_super_product" model="account.analytic.account">
+            <field name="name">Implementation</field>
+            <field name="partner_id" ref="base.res_partner_address_1"/>
+            <field name="type">contract</field>
+            <field name="use_timesheets">True</field>
+            <field name="invoice_on_timesheets">True</field>
+            <field name="hours_qtt_est">100</field>
+            <field name="pricelist_id" ref="product.list0"/>
+            <field name="to_invoice" ref="hr_timesheet_invoice.timesheet_invoice_factor1"/>
+        </record>
+
+        <!-- Contract -->
+
+        <record id="contract_agrolait" model="account.analytic.account">
+            <field name="name">NewContract</field>
+            <field name="type">contract</field>
+            <field name="use_timesheets">True</field>
+            <field name="use_tasks">True</field>
+            <field name="partner_id" ref="base.res_partner_2"/>
+            <field name="type">contract</field>
+            <field name="quantity_max">100</field>
+            <field name="fix_price_invoices">True</field>
+            <field name="amount_max">100</field>
+            <field name="invoice_on_timesheets">True</field>
+            <field name="hours_qtt_est">100</field>
+            <field name="pricelist_id" ref="product.list0"/>
+            <field name="to_invoice" ref="hr_timesheet_invoice.timesheet_invoice_factor1"/>
+            <field name="state">open</field>
+        </record>
+
+        <!-- Analytic Lines -->
+
+        <record id="timesheet_entry_1" model="account.analytic.line">
+            <field name="date" eval="datetime.today()"/>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="name">Requirement Analysis and Implementation</field>
+            <field name="unit_amount">8</field>
+            <field name="to_invoice" ref="hr_timesheet_invoice.timesheet_invoice_factor1"/>
+            <field name="account_id" ref="contract_agrolait"/>
+        </record>
+
+        <record id="timesheet_entry_2" model="account.analytic.line">
+            <field name="date" eval="datetime.today()"/>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="name">Internal R&amp;D</field>
+            <field name="unit_amount">2</field>
+            <field name="to_invoice" ref="hr_timesheet_invoice.timesheet_invoice_factor2"/>
+            <field name="account_id" ref="contract_agrolait"/>
+        </record>
+    </data>
+</flectra>

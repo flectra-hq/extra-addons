@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<flectra>
+    <record id="view_inherited_employee_form" model="ir.ui.view">
+        <field name="name">hr.employee.inherited</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='hr_settings']" position="inside">
+                <group col="2">
+                    <group>
+                        <field name="journal_id" options="{'no_create': True, 'no_create_edit': True}"/>
+                        <field name="product_id" options="{'no_create': True, 'no_create_edit': True}"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_inherited_account_analytic_account_form" model="ir.ui.view">
+        <field name="name">account.analytic.account.inherited</field>
+        <field name="model">account.analytic.account</field>
+        <field name="inherit_id" ref="analytic.view_account_analytic_account_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="/form/sheet" position='before'>
+                <header>
+                    <button name="set_pending" string="To Renew" type="object" states="open"/>
+                    <button name="set_close" string="Close Contract" type="object" states="open,pending"/>
+                    <button name="set_open" string="Set In Progress" type="object" states="pending,close,cancelled,draft"/>
+                    <button name="set_cancel" string="Cancel Contract" type="object" states="open,pending"/>
+                    <field name="state" readonly="1" widget="statusbar"
+                        statusbar_visible="open,pending,close" statusbar_colors='{"pending":"red", "template":"blue"}'/>
+                </header>
+            </xpath>
+            <xpath expr="//div[@name='project']" position="inside">
+                <field name="use_timesheets"/>
+                <label for="use_timesheets" string="Use Timesheets"/>
+                <field name="use_tasks"/>
+                <label for="use_tasks"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="project_invoice_inherited_form" model="ir.ui.view">
+        <field name="name">Inherit project form : Invoicing Data</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="arch" type="xml">
+            <xpath expr='//div[@name="options_active"]' position='inside'>
+                <field name="use_tasks" class="oe_inline"/>
+                <label for="use_tasks" class="oe_inline" string="Tasks"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="project_kanban_inherited_view" model="ir.ui.view">
+        <field name="name">project.project.kanban.inherited</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.view_project_kanban"/>
+        <field name="arch" type="xml">
+            <xpath expr='//field[@name="partner_id"]' position='after'>
+                <field name="use_tasks"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Inherited views for account analytic lines -->
+
+    <record id="view_account_analytic_line_form_inherited" model="ir.ui.view">
+        <field name="name">account.analytic.line.form</field>
+        <field name="model">account.analytic.line</field>
+        <field name="inherit_id" ref="analytic.view_account_analytic_line_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group/field[@name='date']" position='after'>
+                <field name="to_invoice" options="{'no_create': True, 'no_create_edit': True}"/>
+                <field name="journal_id" options="{'no_create': True, 'no_create_edit': True}"/>
+                <field name="invoice_id" options="{'no_create': True, 'no_create_edit': True}"/>
+            </xpath>
+            <field name="account_id" position="replace">
+                <field name="account_id" context="{'default_use_timesheets': 1}"
+                options="{'no_create': True, 'no_create_edit': True}"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_account_analytic_line_tree_inherited" model="ir.ui.view">
+        <field name="name">account.analytic.line.tree</field>
+        <field name="model">account.analytic.line</field>
+        <field name="inherit_id" ref="hr_timesheet.hr_timesheet_line_tree"/>
+        <field name="arch" type="xml">
+            <field name="project_id" position="replace">
+                <field name="project_id" invisible="1"/>
+            </field>
+            <field name="task_id" position="replace">
+                <field name="task_id" invisible="1"/>
+            </field>
+            <xpath expr="//field[@name='project_id']" position="after">
+                <field name="account_id" options="{'no_create': True, 'no_create_edit': True}"/>
+            </xpath>
+            <xpath expr="//field[@name='unit_amount']" position="after">
+                <field name="to_invoice" options="{'no_create': True, 'no_create_edit': True}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="act_analytic_line_modified" model="ir.actions.act_window">
+        <field name="name">Activities</field>
+        <field name="domain">[]</field>
+        <field name="res_model">account.analytic.line</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_type">form</field>
+        <field name="view_id" ref="view_account_analytic_line_tree_inherited"/>
+    </record>
+
+    <menuitem
+        id="hr_timesheet.menu_hr_working_hours"
+        parent="hr_timesheet.menu_hr_time_tracking"
+        action="act_analytic_line_modified"
+        name="Detailed Activities"
+    />
+    
+    <record id="view_account_analytic_line_search_inherit" model="ir.ui.view">
+        <field name="name">account.analytic.line.search.to_invoice</field>
+        <field name="model">account.analytic.line</field>
+        <field name="inherit_id" ref="analytic.view_account_analytic_account_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='tag_ids']" position="after">
+                <filter string="To Invoice" name="to_invoice"
+                    domain="[('invoice_id', '=', False),('to_invoice','!=',False)]"/>
+                <filter string="Invoiced" name="invoice_id"
+                    domain="[('invoice_id', '!=', False),('to_invoice','!=',False)]"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_hr_timesheet_invoice_factor_search" model="ir.ui.view">
+        <field name="name">hr_timesheet_invoice.factor.search</field>
+        <field name="model">hr_timesheet_invoice.factor</field>
+        <field name="arch" type="xml">
+            <search string="Type of invoicing">
+                <field name="name" string="Type of invoicing"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_hr_timesheet_invoice_factor_form" model="ir.ui.view">
+        <field name="name">hr_timesheet_invoice.factor.form</field>
+        <field name="model">hr_timesheet_invoice.factor</field>
+        <field name="arch" type="xml">
+            <form string="Type of invoicing">
+                <sheet>
+                    <group col="4">
+                        <field name="name" required="1"/>
+                        <field name="customer_name"/>
+                        <field name="factor" required="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_hr_timesheet_invoice_factor_tree" model="ir.ui.view">
+        <field name="name">hr_timesheet_invoice.factor.tree</field>
+        <field name="model">hr_timesheet_invoice.factor</field>
+        <field name="arch" type="xml">
+            <tree string="Types of invoicing">
+                <field name="name"/>
+                <field name="customer_name"/>
+                <field name="factor"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_hr_timesheet_invoice_factor_form" model="ir.actions.act_window">
+        <field name="name">Types of Invoicing</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hr_timesheet_invoice.factor</field>
+        <field name="view_type">form</field>
+        <field name="view_id" ref="view_hr_timesheet_invoice_factor_tree"/>
+        <field name="search_view_id" ref="view_hr_timesheet_invoice_factor_search"/>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to add a new type of invoicing.
+            </p>
+            <p>
+                Flectra allows you to create default invoicing types. You might
+                have to regularly assign discounts because of a specific
+                contract or agreement with a customer. From this menu, you can
+                create additional types of invoicing to speed up your
+                invoicing.
+            </p>
+        </field>
+    </record>
+
+    <menuitem
+        id="hr_timesheet_invoice_factor_view"
+        action="action_hr_timesheet_invoice_factor_form"
+        parent="account.menu_finance_entries"
+        sequence="25"
+        groups="base.group_no_one"
+    />
+</flectra>
