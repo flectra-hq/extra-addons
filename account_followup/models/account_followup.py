@@ -114,7 +114,7 @@ Best Regards,
                     line.description % {'partner_name': '', 'date': '',
                                         'user_signature': '',
                                         'company_name': ''}
-                except:
+                except ValidationError:
                     raise ValidationError(
                         _('Your description is invalid, use the right legend '
                           'or %% if you want to use the percent character.'))
