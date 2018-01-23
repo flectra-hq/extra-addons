@@ -55,7 +55,7 @@ class AccountAnalyticProfit(models.AbstractModel):
         return self.env['res.users'].browse(ids)
 
     def _journal_ids(self, form, user_id):
-        if isinstance(user_id, (int, long)):
+        if isinstance(user_id, int):
             user_id = [user_id]
 
         line_ids = self.env['account.analytic.line'].search([
