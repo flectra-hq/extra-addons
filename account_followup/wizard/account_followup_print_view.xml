@@ -85,10 +85,8 @@
             <field name="model">account_followup.sending.results</field>
             <field name="arch" type="xml">
                 <form string="Summary of actions">
-                    <header>
-                        <field name="description" widget="html"
-                               class="oe_view_only"/>
-                    </header>
+                    <field name="description" widget="html"
+                           class="oe_view_only"/>
                     <footer>
                         <field name="needprinting" invisible="1"/>
                         <div attrs="{'invisible':[('needprinting','=', False)]}">

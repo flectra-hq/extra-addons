@@ -370,7 +370,7 @@ class ResPartner(models.Model):
         # If not, it may not be present in the
         # psql view the report is based on, so we need to stop the user here.
         if not self.env['account.move.line'].search(
-                [('partner_id', '=', self),
+                [('partner_id', '=', self.id),
                  ('account_id.user_type_id.type', '=', 'receivable'),
                  ('full_reconcile_id', '=', False),
                  ('company_id', '=', company_id),
@@ -383,7 +383,7 @@ class ResPartner(models.Model):
         # build the id of this partner in the psql view.
         # Could be replaced by a search with
         # [('company_id', '=', company_id),('partner_id', '=', ids[0])]
-        wizard_partner_ids = [self * 10000 + company_id]
+        wizard_partner_ids = [self.id * 10000 + company_id]
         followup_ids = self.env['account_followup.followup'].search(
             [('company_id', '=', company_id)])
         if not followup_ids:
@@ -391,7 +391,7 @@ class ResPartner(models.Model):
                 "There is no followup plan defined for the current company."))
         data = {
             'date': fields.date.today(),
-            'followup_id': followup_ids[0],
+            'followup_id': followup_ids[0].id,
         }
         # call the print overdue report on this partner
         return self.do_partner_print(wizard_partner_ids, data)

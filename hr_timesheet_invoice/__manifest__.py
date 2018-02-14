@@ -21,7 +21,7 @@
 
 {
     'name': 'Invoice on Timesheets',
-    'depends': ['base', 'hr_timesheet', 'product', 'project'],
+    'depends': ['base', 'account', 'hr_timesheet', 'product', 'project'],
     'version': '1.0',
     'category': 'Sales Management',
     'description': """
@@ -33,6 +33,7 @@ Module to generate invoices based on costs (human resources, expenses, ...).
 You can define price lists in analytic account, make some theoretical revenue
 reports.""",
     'author': 'OpenERP SA, FlectraHQ',
+    'license': 'AGPL-3',
     'website': 'https://www.odoo.com/page/employees',
     'data': [
         'security/ir.model.access.csv',
@@ -49,6 +50,9 @@ reports.""",
     'demo': [
         # 'demo/hr_timesheet_invoice_data.xml',
         'demo/hr_timesheet_invoice_demo.xml',
+    ],
+    'images': [
+        'static/description/invoice-on-timesheets-banner.jpg',
     ],
     'test': [
     ],

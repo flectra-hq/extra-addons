@@ -19,5 +19,8 @@
         "security/rule.xml",
         "security/ir.model.access.csv",
     ],
+    'images': [
+        'static/description/currency-rate-update-banner.jpg'
+    ],
     'installable': True
 }
