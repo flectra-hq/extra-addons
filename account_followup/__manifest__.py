@@ -47,6 +47,7 @@ Reporting / Accounting / **Follow-ups Analysis
 
 """,
     'author': 'OpenERP SA, FlectraHQ',
+    'license': 'AGPL-3',
     'website': 'https://www.odoo.com/page/billing',
     'depends': ['account_invoicing', 'mail'],
     'data': [
@@ -61,6 +62,9 @@ Reporting / Accounting / **Follow-ups Analysis
         'views/account_followup_reports.xml'
     ],
     'demo': ['demo/account_followup_demo.xml'],
+    'images': [
+        'static/description/payment-follow-up-management-banner.jpg'
+    ],
     'installable': True,
     'auto_install': False,
 }

@@ -200,10 +200,7 @@
             </field>
             <field name="search_view_id" ref="customer_followup_search_view"/>
         </record>
-        <menuitem id="menu_sales_followup" parent="account.menu_finance"
-                  name="Payment Follow-up"
-                  groups="account.group_account_invoice" sequence="2"/>
-        <menuitem id="menu_sale_followup" parent="menu_sales_followup"
+        <menuitem id="menu_sale_followup" parent="menu_finance_followup"
                   sequence="10"
                   action="action_customer_my_followup"
                   groups="account.group_account_invoice"/>

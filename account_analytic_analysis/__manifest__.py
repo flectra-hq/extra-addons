@@ -35,6 +35,7 @@ month-wise.
 -----------
     """,
     'author': 'Camptocamp / Odoo, FlectraHQ',
+    'license': 'AGPL-3',
     'website': 'https://www.odoo.com/page/billing',
     'depends': ['sale_stock', 'hr_timesheet_invoice', 'project'],
     'data': [
@@ -48,6 +49,9 @@ month-wise.
     ],
     'demo': [
         'demo/analytic_account_demo.xml'
+    ],
+    'images': [
+        'static/description/contracts-management-banner.jpg',
     ],
     'test': [],
     'installable': True,
