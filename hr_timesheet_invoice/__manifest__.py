@@ -26,10 +26,7 @@
     'category': 'Sales Management',
     'description': """
 Generate your Invoices from Expenses, Timesheet Entries.
-========================================================
-
 Module to generate invoices based on costs (human resources, expenses, ...).
-
 You can define price lists in analytic account, make some theoretical revenue
 reports.""",
     'author': 'OpenERP SA, FlectraHQ',
