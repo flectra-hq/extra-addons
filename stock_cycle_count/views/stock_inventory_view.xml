@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2017 Eficent Business and IT Consulting Services S.L.
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<flectra>
+
+    <record id="view_inventory_tree" model="ir.ui.view">
+        <field name="name">Inventory tree view - cycle count extension</field>
+        <field name="model">stock.inventory</field>
+        <field name="inherit_id" ref="stock.view_inventory_tree"/>
+        <field name="arch" type="xml">
+            <field name="date" position="after">
+                <field name="location_id"/>
+                <field name="cycle_count_id"/>
+                <field name="inventory_accuracy"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_inventory_form" model="ir.ui.view">
+        <field name="name">Inventory form view - cycle count extension</field>
+        <field name="model">stock.inventory</field>
+        <field name="inherit_id" ref="stock.view_inventory_form"/>
+        <field name="arch" type="xml">
+            <field name="date" position="after">
+                <field name="cycle_count_id"/>
+                <label for="inventory_accuracy"/>
+                <div>
+                    <field name="inventory_accuracy" class="oe_inline"/>
+                    %
+                </div>
+                <field name="over_discrepancy_line_count" attrs="{'invisible': [('state', '!=', 'pending')]}"/>
+            </field>
+            <field name="filter" position="after">
+                <field name="exclude_sublocation"/>
+            </field>
+            <field name="state" position="attributes">
+                <attribute name="statusbar_visible">
+                    draft,confirm,pending,done
+                </attribute>
+                <attribute name="statusbar_colors">
+                    {"pending":"red"}
+                </attribute>
+            </field>
+            <xpath expr="//button[@name='action_done']"
+                   position="attributes">
+                <attribute name="groups">stock_cycle_count.group_stock_inventory_validation</attribute>
+                <attribute name="context">{'normal_view': True}</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_done']"
+                   position="after">
+                <button name="action_force_done"
+                        string="Force Validation" type="object"
+                        class="oe_highlight"
+                        groups="stock_cycle_count.group_stock_inventory_validation_always"
+                        attrs="{'invisible': ['|',('state', '!=', 'pending'),('over_discrepancy_line_count', '=', 0)]}"/>
+            </xpath>
+            <xpath expr="//field[@name='line_ids']/tree/field[@name='product_qty']"
+                   position="after">
+                <field name="discrepancy_qty"/>
+                <field name="discrepancy_percent"/>
+                <field name="discrepancy_threshold"/>
+            </xpath>
+            <xpath expr="//field[@name='line_ids']/tree" position="attributes">
+                <attribute name="decoration-danger">theoretical_qty &lt; 0 or discrepancy_percent &gt; discrepancy_threshold</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_inventory_filter" model="ir.ui.view">
+        <field name="name">stock.inventory.filter - stock_cycle_count</field>
+        <field name="model">stock.inventory</field>
+        <field name="inherit_id" ref="stock.view_inventory_filter"/>
+        <field name="arch" type="xml">
+            <field name="company_id" position="after">
+                <field name="location_id"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_inventory_graph" model="ir.ui.view">
+        <field name="name">stock.inventory.graph</field>
+        <field name="model">stock.inventory</field>
+        <field name="arch" type="xml">
+            <graph string="Inventory accuracy evolution" type="line">
+                <field name="cycle_count_id" type="col"/>
+                <field name="inventory_accuracy" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_inventory_pivot" model="ir.ui.view">
+        <field name="name">stock.inventory.pivot</field>
+        <field name="model">stock.inventory</field>
+        <field name="arch" type="xml">
+            <pivot string="Inventory Accuracy">
+                <field name="date" type="col"/>
+                <field name="location_id" type="row"/>
+                <field name="inventory_accuracy" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="act_accuracy_stats">
+        <field name="domain">[('exclude_sublocation', '=', True),
+            ('state', '=', 'done')]
+        </field>
+        <field name="name">Accuracy Stats</field>
+        <field name="res_model">stock.inventory</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">pivot,tree,form,graph</field>
+    </record>
+
+    <menuitem id="menu_report_accuracy_stats"
+              name="Cycle Count Accuracy"
+              parent="stock.menu_warehouse_report"
+              action="act_accuracy_stats"/>
+
+</flectra>

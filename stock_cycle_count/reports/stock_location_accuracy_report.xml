@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2017 Eficent Business and IT Consulting Services S.L.
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+
+<flectra>
+
+    <!-- Templates -->
+    <template id="stock_location_accuracy">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <br/>
+                        <div class="oe_structure"/>
+                        <h3>
+                            <span>Location:</span>
+                            <span t-field="doc.name"/>
+                        </h3>
+
+                        <div class="row mt32 mb32" id="informations">
+                            <div class="col-xs-6">
+                                <strong>Complete name:</strong>
+                                <p t-field="doc.complete_name"/>
+                            </div>
+                            <div class="col-xs-3">
+                                <strong>Current Accuracy:</strong>
+                                <p t-field="doc.loc_accuracy"/>
+                            </div>
+                        </div>
+
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <th>Inventory</th>
+                                    <th class="text-center">Date</th>
+                                    <th class="text-center">Accuracy</th>
+                                </tr>
+                           </thead>
+                           <tbody>
+                               <t t-foreach="get_location_data(doc)"
+                                           t-as="l">
+                                    <tr>
+                                        <td>
+                                           <t t-esc="l['inv_name']"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <t t-esc="datetime.datetime.strptime(l['inv_date'], '%Y-%m-%d %H:%M:%S').strftime('%d-%m-%Y %H:%M:%S')"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <t t-esc="l['inv_accuracy']"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- Report action -->
+    <report
+        id="action_report_stock_location_accuracy"
+        model="stock.location"
+        name="stock_cycle_count.stock_location_accuracy"
+        string="Accuracy report"
+        report_type="qweb-pdf"
+        groups="stock.group_stock_user"/>
+
+</flectra>
