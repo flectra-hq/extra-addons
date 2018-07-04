@@ -7,7 +7,7 @@
 {
     'name': 'Import QIF Bank Statements',
     'category': 'Accounting',
-    'version': '11.0.1.0.0',
+    'version': '2.0.0',
     'author': 'FlectraHQ,'
               'Odoo SA,'
               'Tecnativa,'
