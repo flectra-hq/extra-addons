@@ -88,8 +88,8 @@ class ReportRappel(models.AbstractModel):
             total = total + line_data['balance']
             lines_per_currency[currency].append(line_data)
 
-        return [{'total': total, 'line': lines, 'currency': currency} for
-                currency, lines in
+        return [{'total': total, 'line': lines, 'currency': currency_id} for
+                currency_id, lines in
                 lines_per_currency.items()]
 
     def _get_text(self, stat_line, followup_id, context=None):
