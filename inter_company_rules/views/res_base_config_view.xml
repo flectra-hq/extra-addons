@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<flectra>
+    <record id="res_config_settings_inter_company_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.inter.company</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base_branch_company.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='multi_branch']" position="before">
+                <h2 attrs="{'invisible': [('group_multi_company','=',False)]}">Inter Company Rules</h2>
+                <div class="row mt16 o_settings_container" name="inter_company_rules"
+                     attrs="{'invisible': [('group_multi_company','=',False)]}">
+                    <div class="col-xs-12 col-md-6 o_setting_box">
+                        <label string="Define Inter-company rules for Transactions"/>
+                        <div class="o_setting_right_pane">
+                            <div class="content-group">
+                                <div class="mt16 row">
+                                    <label for="inter_company_id" string="Company"
+                                           class="col-xs-3 col-md-3 o_light_label"/>
+                                    <field name="inter_company_id" class="oe_inline"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12">
+                            <field name="inter_rule_type" widget="radio"/>
+                        </div>
+
+
+                        <div class="col-xs-12" attrs="{'invisible': [('inter_rule_type','!=','rules_so_and_po')]}">
+                            <div class="o_setting_left_pane">
+                                <field name="inter_rules_so_from_po"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label string="Create Sale Orders when buying from this company"
+                                       for="inter_rules_so_from_po"/>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12" attrs="{'invisible': [('inter_rule_type','!=','rules_so_and_po')]}">
+                            <div class="o_setting_left_pane">
+                                <field name="inter_rules_po_from_so"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label string="Create Purchase Orders when selling to this company"
+                                       for="inter_rules_po_from_so"/>
+                            </div>
+                        </div>
+
+                        <!--Display Warehouse-->
+                        <div class="content-group"
+                             attrs="{'required': [('inter_rule_type', 'in', 'rules_so_and_po')], 'invisible': [('inter_rule_type', 'not in', 'rules_so_and_po')]}">
+                            <div class="col-xs-12">
+                                <label for="warehouse_id"/>
+                                <field name="warehouse_id" domain="[('company_id', '=', inter_company_id)]" class="oe_inline"/>
+                            </div>
+                        </div>
+
+
+                        <!--Auto Validation for PO/SO-->
+                        <div class="col-xs-12" attrs="{'invisible': [('inter_rule_type','!=','rules_so_and_po')]}">
+                            <div class="o_setting_left_pane">
+                                <field name="inter_rule_auto_validation"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label string="Sale/Purchase Orders Auto Validation" for="inter_rule_auto_validation"/>
+                            </div>
+                        </div>
+                        <!--Create Invoice/ Refund to this Company-->
+                        <div class="col-xs-12"
+                             attrs="{'invisible': [('inter_rule_type','!=','rules_invoice_and_refunds')]}">
+                            <div class="o_setting_left_pane">
+                                <field name="auto_generate_invoices"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label string="Create Invoices/Refunds when encoding invoices/refunds made to this company"/>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</flectra>
+
+
+
