@@ -16,7 +16,7 @@ Email validation for partner to check if it is a valid E-mail address.""",
     'website': 'https://flectrahq.com',
     'category': 'Extra Tools',
     'depends': ['base_setup'],
-    'external_dependencies': {'python': ['py3DNS', 'validate_email']},
+    'external_dependencies': {'python3': ['py3DNS', 'validate_email']},
     'installable': True,
     'auto_install': False,
 }
